@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react'; // Import useEffect
 import './App.css';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000';
+// This value is public to the browser because the frontend is a static app.
+// If the API URL were sensitive, it should be routed via a backend proxy instead.
+const Config = {
+  apiBaseUrl: 'https://agro-backtend.onrender.com',
+};
 
 function App() {
   const [state, setState] = useState('');
@@ -20,7 +24,7 @@ function App() {
 
   // Fetch soil types from backend on component mount
   useEffect(() => {
-    fetch(`${API_BASE_URL}/get_soil_types`)
+    fetch(`${Config.apiBaseUrl}/get_soil_types`)
       .then((response) => response.json())
       .then((data) => {
         setAllSoilTypes(data);
@@ -33,7 +37,7 @@ function App() {
       });
 
     // Fetch states from backend on component mount
-    fetch(`${API_BASE_URL}/get_states`)
+    fetch(`${Config.apiBaseUrl}/get_states`)
       .then((response) => response.json())
       .then((data) => {
         setAllStates(data);
@@ -58,7 +62,7 @@ function App() {
       formData.append('image', uploadedImage);
 
       try {
-        const response = await fetch(`${API_BASE_URL}/classify_soil_image`, {
+        const response = await fetch(`${Config.apiBaseUrl}/classify_soil_image`, {
           method: 'POST',
           body: formData,
         });
@@ -88,7 +92,7 @@ function App() {
       soil_type_from_image: soilTypeFromImage, 
     };
 
-    fetch(`${API_BASE_URL}/recommend_crop`, {
+    fetch(`${Config.apiBaseUrl}/recommend_crop`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
